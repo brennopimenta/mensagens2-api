@@ -49,7 +49,6 @@ public class CidadeResource {
     public ResponseEntity<Cidade> atualizar(@PathVariable Long codigo, @Validated @RequestBody Cidade cidade){
         Cidade cidadeSalva = cidadeService.atualizar(codigo, cidade);
         return ResponseEntity.ok(cidadeSalva);
-
     }
 
     @DeleteMapping("/{codigo}")

@@ -9,8 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 @Service
 public class CidadeService {
 
@@ -26,9 +24,7 @@ public class CidadeService {
     }
 
     public Cidade salvar(@Validated Cidade cidade) {
-
         Cidade cidadeExistente= buscarPeloCodigo(cidade.getCodigo());
-
         if (cidadeExistente == null) {
             return cidadeRepository.save(cidade);
         } else {
