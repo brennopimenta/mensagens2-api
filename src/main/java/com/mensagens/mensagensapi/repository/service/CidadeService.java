@@ -3,6 +3,7 @@ package com.mensagens.mensagensapi.repository.service;
 import com.mensagens.mensagensapi.model.Cidade;
 import com.mensagens.mensagensapi.repository.CidadeRepository;
 import com.mensagens.mensagensapi.repository.service.exception.MyHandlerRunTimeException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class CidadeService {
     @Autowired
     private CidadeRepository cidadeRepository;
 
-    private Optional<Cidade> buscarPeloCodigo(Long codigo) {
-        Optional<Cidade> cidadeSalva = cidadeRepository.findById(codigo);
+    private Cidade buscarPeloCodigo(Long codigo) {
+        Cidade cidadeSalva = cidadeRepository.getOne(codigo);
         if (cidadeSalva == null) {
             throw new EmptyResultDataAccessException(1);
         }
@@ -26,12 +27,19 @@ public class CidadeService {
 
     public Cidade salvar(@Validated Cidade cidade) {
 
-        Optional<Cidade> cidadeExistente= buscarPeloCodigo(cidade.getCodigo());
+        Cidade cidadeExistente= buscarPeloCodigo(cidade.getCodigo());
 
-        if (!cidadeExistente.isPresent()) {
+        if (cidadeExistente == null) {
             return cidadeRepository.save(cidade);
         } else {
             throw new MyHandlerRunTimeException("Já existe uma cidade com estes dados!");
         }
     }
+
+    public Cidade atualizar(Long codigo, Cidade cidade) {
+        Cidade cidadeSalva = buscarPeloCodigo(codigo);
+        BeanUtils.copyProperties(cidade, cidadeSalva, "codigo");
+        return cidadeRepository.save(cidadeSalva);
+    }
+
 }

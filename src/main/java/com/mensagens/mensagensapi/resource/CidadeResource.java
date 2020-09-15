@@ -28,7 +28,7 @@ public class CidadeResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    @GetMapping("/listar")
+    @GetMapping
     public List<Cidade> listar() {
         return cidadeRepository.findAll();
     }
@@ -43,6 +43,13 @@ public class CidadeResource {
         Cidade cidadeSalva = cidadeService.salvar(cidade);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, cidadeSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(cidadeSalva);
+    }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity<Cidade> atualizar(@PathVariable Long codigo, @Validated @RequestBody Cidade cidade){
+        Cidade cidadeSalva = cidadeService.atualizar(codigo, cidade);
+        return ResponseEntity.ok(cidadeSalva);
+
     }
 
     @DeleteMapping("/{codigo}")
