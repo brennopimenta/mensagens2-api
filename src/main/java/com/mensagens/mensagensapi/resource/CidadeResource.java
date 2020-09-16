@@ -42,6 +42,7 @@ public class CidadeResource {
     @PostMapping
     public ResponseEntity<Cidade> salvar(@Valid @RequestBody Cidade cidade, HttpServletResponse response) {
         Cidade cidadeSalva = cidadeRepository.save(cidade);
+        // Para inserir HeaderLocation foi implementado ocodigo no package event -> listener
         publisher.publishEvent(new RecursoCriadoEvent(this, response, cidadeSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(cidadeSalva);
     }
