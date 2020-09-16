@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,14 +40,14 @@ public class CidadeResource {
     }
 
     @PostMapping
-    public ResponseEntity<Cidade> salvar(@Validated @RequestBody Cidade cidade, HttpServletResponse response) {
-        Cidade cidadeSalva = cidadeService.salvar(cidade);
+    public ResponseEntity<Cidade> salvar(@Valid @RequestBody Cidade cidade, HttpServletResponse response) {
+        Cidade cidadeSalva = cidadeRepository.save(cidade);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, cidadeSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(cidadeSalva);
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Cidade> atualizar(@PathVariable Long codigo, @Validated @RequestBody Cidade cidade){
+    public ResponseEntity<Cidade> atualizar(@PathVariable Long codigo, @Valid @RequestBody Cidade cidade){
         Cidade cidadeSalva = cidadeService.atualizar(codigo, cidade);
         return ResponseEntity.ok(cidadeSalva);
     }

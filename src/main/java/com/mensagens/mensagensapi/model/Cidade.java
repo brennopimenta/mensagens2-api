@@ -1,12 +1,12 @@
 package com.mensagens.mensagensapi.model;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Data
@@ -20,7 +20,8 @@ public class Cidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
 
-    @NotNull
+    @NotNull(message = "Nome da Cidade não pode ser nulo!")
+    @Size(min = 3, max = 30, message = "O nome deve ter entre {min} e {max} caracteres!")
     private String nome;
 
     @NotNull
